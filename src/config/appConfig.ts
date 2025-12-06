@@ -8,7 +8,7 @@ export interface AppConfig {
 }
 
 const parseCorsOrigins = (origins: string | undefined): string[] | boolean => {
-  if (!origins) return true; // Allow all origins in development
+  if (!origins) return true;
   if (origins === '*') return true;
   return origins.split(',').map((origin) => origin.trim());
 };

@@ -61,10 +61,9 @@ import { AuthConfig } from 'src/config/authConfig';
       },
       inject: [ConfigService],
     }),
-    // ... other imports
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
-  exports: [JwtModule], // Add this line
+  exports: [JwtModule],
 })
 export class AuthModule {}

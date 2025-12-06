@@ -104,8 +104,7 @@ export class AuthService {
     // Generate JWT access and refresh tokens for the authenticated user
     const tokens = await this.generateTokens(user.id, user.email);
 
-    // Optional: Store refresh token hash in database for revocation
-    // await this.updateRefreshToken(user.id, tokens.refresh_token);
+    await this.updateRefreshToken(user.id, tokens.refresh_token);
 
     // Update last login timestamp for security monitoring
     await this.prisma.user.update({
@@ -220,7 +219,7 @@ export class AuthService {
       access_token: accessToken,
       refresh_token: refreshToken,
       token_type: 'Bearer',
-      expires_in: 900, // 15 minutes in seconds (note: should match actual token expiry)
+      expires_in: this.accessTokenExpiry,
     };
   }
 

@@ -21,7 +21,8 @@ model User {
   password     String
   name         String?
   apiKey       ApiKey[]
-  refreshToken String?   // Add this
+  refreshToken String?   
+ accessToken   String?
   lastLoginAt  DateTime? // Add this
   isActive     Boolean   @default(true) // Add this
   createdAt    DateTime  @default(now())

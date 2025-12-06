@@ -6,6 +6,7 @@ import {
   Body,
   Request,
   UseGuards,
+  Logger,
 } from '@nestjs/common';
 import { KeysService } from './keys.service';
 import { CreateKeyDto } from './dto/create-key.dto';
@@ -23,7 +24,10 @@ import { User } from '../auth/jwt.strategy';
 @UseGuards(AuthGuard('jwt'))
 @ApiBearerAuth('JWT-auth')
 export class KeysController {
-  constructor(private keysService: KeysService) {}
+  constructor(
+    private keysService: KeysService,
+    // private logger = new Logger(KeysController.name),
+  ) {}
 
   @Post('create')
   @ApiOperation({ summary: 'Create a new API key (JWT required)' })
@@ -36,13 +40,14 @@ export class KeysController {
         apiKey: 'sk_550e...a1b2',
         details: {
           id: 'uuid',
-          name: 'Payment Service',
+          name: 'Payment API',
           preview: 'sk_550e...a1b2',
         },
       },
     },
   })
   create(@Request() req: { user: User }, @Body() dto: CreateKeyDto) {
+    // this.logger.log(req.user, dto.name, dto.expirationDays);
     return this.keysService.create(req.user.id, dto.name, dto.expirationDays);
   }
 
