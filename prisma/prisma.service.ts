@@ -1,4 +1,3 @@
-// prisma/prisma.service.ts
 import {
   Injectable,
   OnModuleInit,
@@ -25,7 +24,6 @@ export class PrismaService
       errorFormat: 'pretty',
     });
 
-    // Optional: Log queries in development
     if (process.env.NODE_ENV === 'development') {
       this.$on('query' as never, (e: any) => {
         this.logger.debug(`Query: ${e.query}`);
@@ -53,7 +51,6 @@ export class PrismaService
     this.logger.log('Disconnected from database');
   }
 
-  // Helper method for clean transaction handling
   async cleanDatabase() {
     if (process.env.NODE_ENV === 'production') {
       throw new Error('Cannot clean database in production');

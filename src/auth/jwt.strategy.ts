@@ -12,11 +12,9 @@ export interface JwtPayload {
   exp?: number;
 }
 
-// Define your User type (adjust based on your actual User entity)
 export interface User {
   id: string;
   email: string;
-  // ... other user properties
 }
 
 @Injectable()

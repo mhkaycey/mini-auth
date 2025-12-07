@@ -12,7 +12,6 @@ async function bootstrap() {
   const config = configService.get<AppConfig>('mini-auth');
 
   app.useLogger(logger);
-  // CORS Configuration
   app.enableCors({
     origin: config?.corsOrigins ?? true,
     credentials: true,
@@ -27,19 +26,15 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
-  // Swagger Configuration
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Mini Dual Auth API')
     .setDescription('User JWT + Service API Key authentication')
     .setVersion('1.0')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-      'JWT-auth', // name used in @ApiBearerAuth()
+      'JWT-auth',
     )
-    .addApiKey(
-      { type: 'apiKey', name: 'X-API-KEY', in: 'header' },
-      'api-key', // name used in @ApiHeader()
-    )
+    .addApiKey({ type: 'apiKey', name: 'X-API-KEY', in: 'header' }, 'api-key')
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);

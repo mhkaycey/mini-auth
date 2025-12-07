@@ -4,7 +4,7 @@ import { LoginDto } from './dto/login.dto';
 import { SignupDto } from './dto/signup.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { throttle } from 'rxjs';
+import { Throttle } from '@nestjs/throttler';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -12,6 +12,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('signup')
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({ status: 201, description: 'User created' })
   @ApiResponse({ status: 400, description: 'Email already exists' })
@@ -19,8 +20,8 @@ export class AuthController {
     return this.authService.signup(body);
   }
 
-  //   @throttle(5, 60)
   @Post('login')
+  @Throttle({ default: { limit: 5, ttl: 900000 } })
   @ApiOperation({ summary: 'Login with email & password' })
   @ApiResponse({
     status: 200,

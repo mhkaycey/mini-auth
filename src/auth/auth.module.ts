@@ -1,39 +1,3 @@
-// import { Module } from '@nestjs/common';
-// import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
-// import { ConfigModule, ConfigService } from '@nestjs/config';
-
-// import { AuthController } from './auth.controller';
-// import { AuthService } from './auth.service';
-// import { JwtStrategy } from './jwt.strategy';
-// import { AuthConfig } from 'src/config/authConfig';
-
-// @Module({
-//   imports: [
-//     JwtModule.registerAsync({
-//       imports: [ConfigModule],
-//       inject: [ConfigService],
-//       useFactory: (configService: ConfigService): JwtModuleOptions => {
-//         const auth = configService.get<AuthConfig>('auth');
-//         const secret = auth?.jwt.secret;
-//         if (!secret) {
-//           throw new Error('JWT_SECRET environment variable must be set');
-//         }
-//         return {
-//           secret,
-//           signOptions: {
-//             expiresIn: (auth?.jwt.expiresIn || '24h') as any,
-//           },
-//         };
-//       },
-//     }),
-//   ],
-//   controllers: [AuthController],
-//   providers: [AuthService, JwtStrategy],
-//   exports: [AuthService],
-// })
-// export class AuthModule {}
-
-// auth/auth.module.ts
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -41,7 +5,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthConfig } from 'src/config/authConfig';
-// ... other imports
+
 @Module({
   imports: [
     JwtModule.registerAsync({

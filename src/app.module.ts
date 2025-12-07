@@ -8,6 +8,7 @@ import { PrismaModule } from 'prisma/prisma.module';
 import appConfig from './config/appConfig';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ExampleModule } from './example/example.module';
 
 @Module({
   imports: [
@@ -18,11 +19,11 @@ import { AppService } from './app.service';
     PrismaModule,
     AuthModule,
     KeysModule,
+    ExampleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-// ...
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(DualAuthMiddleware).forRoutes('*');

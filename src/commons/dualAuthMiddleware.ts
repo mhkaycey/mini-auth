@@ -1,5 +1,6 @@
 import {
   Injectable,
+  Logger,
   NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -7,7 +8,6 @@ import { Request, Response, NextFunction } from 'express';
 import { KeysService } from '../keys/keys.service';
 import { JwtService } from '@nestjs/jwt';
 
-// Extended Request interface to include our custom properties
 interface AuthenticatedRequest extends Request {
   user?: Record<string, unknown>;
   authType?: 'jwt' | 'api-key';
@@ -16,6 +16,7 @@ interface AuthenticatedRequest extends Request {
 
 @Injectable()
 export class DualAuthMiddleware implements NestMiddleware {
+  private readonly logger = new Logger(DualAuthMiddleware.name);
   constructor(
     private keysService: KeysService,
     private jwtService: JwtService,
@@ -27,7 +28,6 @@ export class DualAuthMiddleware implements NestMiddleware {
       | string
       | undefined;
 
-    // Try API Key first
     if (apiKey) {
       try {
         const result = await this.keysService.validate(apiKey);
@@ -38,11 +38,11 @@ export class DualAuthMiddleware implements NestMiddleware {
           return next();
         }
       } catch {
-        // API key validation failed, continue to JWT validation
+        this.logger.error('Failed to validate API key');
+        // next();
       }
     }
 
-    // Then try Bearer JWT
     if (authHeader && authHeader.startsWith('Bearer ')) {
       try {
         const token = authHeader.split(' ')[1];
@@ -57,11 +57,11 @@ export class DualAuthMiddleware implements NestMiddleware {
         req.authType = 'jwt';
         return next();
       } catch {
-        // JWT validation failed, continue to allow public routes
+        this.logger.error('Failed to validate JWT token');
+        // next();
       }
     }
 
-    // Public routes allowed, protected ones will fail later
     next();
   }
 }
